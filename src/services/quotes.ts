@@ -1,19 +1,15 @@
-import axios from "axios";
-const baseUrl = "https://quote-garden.herokuapp.com/api/v3/quotes";
+async function getRandom(): Promise<{ content: string; author: string }> {
+  const res = await fetch("https://dummyjson.com/quotes/random", { cache: "no-store" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const data = await res.json();
+  return {
+    content: data.quote ?? "",
+    author: data.author ?? "Unknown",
+  };
+}
 
-const getRandom = async (): Promise<any> => {
-  const response = await axios.get(`${baseUrl}/random`);
-  return response.data.data[0];
-};
+async function getQuotesFromAuthor(_author: string) {
+  return [];
+}
 
-const getQuotesFromAuthor = async (author: string): Promise<any> => {
-  const response = await axios.get(`${baseUrl}?author=${author}&limit=3`);
-  return response.data.data;
-};
-
-const quoteService = {
-  getRandom,
-  getQuotesFromAuthor,
-};
-
-export default quoteService;
+export default { getRandom, getQuotesFromAuthor };
